@@ -1,0 +1,22 @@
+{
+    "Settings": {
+        "APIName": "MyRecoveryBot",
+        "APIKey": "jTwRVuJpE4UxjQjeMf",
+        "APISecret": "QASM5gE9pXgPalH1bzRoGClB4tp3sy96eBf5",
+        "Pairs": [
+            "SOLUSDT"
+        ],
+        "Side": "Buy",
+        "StartUnits": 30.0,
+        "UnitPrice": 40.0,
+        "TPSLTicks": 200.0,
+        "ZoneDivider": 2,
+        "TickPrice": 0.01,
+        "Leverage": 5.0,
+        "BaseTimes1": 1.55,
+        "BaseTimes2": 0.99,
+        "BaseTimes3": 1.5,
+        "BotToken": "put your Telegram chatBot API key",
+        "ChatID": "Put your chatID"
+    }
+}

@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>Recovery Zone Trading Bot</h1>
+        <p>ByBit Futures trading with TradingView alerts</p>
+        <div class="trades">
+            <button type="button" class="btn btn-lg btn-default"> Account Balance: <span
+                    class="glyphicon glyphicon-usd"></span>{{ account_balance }}
+            </button>
+        </div>
+        <hr>
+    </div>
+    <div class="container text-center" id="formsettings">
+        {% if settings %}
+        <p>Settings <span class="glyphicon glyphicon-hand-down"></span></p>
+        <form action="" method="POST" role="form" style="margin: auto; width: 100%">
+            {% csrf_token %}
+            <table class="table table-dark" id="settingstablepairs">
+                <thead>
+                <tr>
+                    <th class="text-dark"> Pairs</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        {% for pair in settings.Pairs %}
+                        <label aria-label="Pairs">
+                            <input type="text" class="form-control" name={{pair}} value={{pair}} >
+                        </label>
+                        {% endfor %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-dark" id="settingstableaddpair">
+                <thead>
+                <tr>
+                    <th class="text-dark"> AddPair</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <label aria-label="Pairs">
+                            <input type="text" class="form-control" name="AddPair" value="">
+                        </label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-dark" id="settingstableinputs">
+                <thead>
+                <tr>
+                    <th class="text-dark"> Start Units</th>
+                    <th class="text-dark"> Unit Price</th>
+                    <th class="text-dark"> TP_SL Ticks</th>
+                    <th class="text-dark"> ZoneDivider</th>
+                    <th class="text-dark"> Tick Price</th>
+                    <th class="text-dark"> Leverage</th>
+                    <th class="text-dark"> BaseTimes1</th>
+                    <th class="text-dark"> BaseTimes2</th>
+                    <th class="text-dark"> BaseTimes3</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="StartUnits"
+                               value="{{ settings.StartUnits }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="UnitPrice"
+                               value="{{ settings.UnitPrice }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="TPSLTicks"
+                               value="{{ settings.TPSLTicks }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="ZoneDivider"
+                               value="{{ settings.ZoneDivider }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="TickPrice"
+                               value="{{settings.TickPrice}}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="Leverage"
+                               value="{{settings.Leverage}}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="BaseTimes1"
+                               value="{{settings.BaseTimes1}}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="BaseTimes2"
+                               value="{{settings.BaseTimes2}}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="BaseTimes3"
+                               value="{{settings.BaseTimes3}}" required>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" name="updatesettings" class="btn btn-lg btn-default"><span
+                    class="glyphicon glyphicon-cog"></span>
+                UPDATE SETTINGS
+            </button>
+        </form>
+        <hr>
+        {% endif %}
+    </div>
+    <div class="container text-center" id="formplaceorder">
+        <p>Place an order <span class="glyphicon glyphicon-hand-down"></span></p>
+        <form action="" method="POST" role="form" style="margin: auto; width: 100%">
+            {% csrf_token %}
+            <table class="table table-dark" id="placeordertable">
+                <thead>
+                <tr>
+                    <th class="text-dark"> Pair</th>
+                    <th class="text-dark"> Side</th>
+                    <th class="text-dark"> Start Units</th>
+                    <th class="text-dark"> Unit Price</th>
+                    <th class="text-dark"> TP_SL Ticks</th>
+                    <th class="text-dark"> ZoneDivider</th>
+                    <th class="text-dark"> Tick Price</th>
+                    <th class="text-dark"> Leverage</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="Pair" value="{{ settings.Pairs.0 }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="Side" value="{{ settings.Side }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="StartUnits" value="{{ settings.StartUnits }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="UnitPrice" value="{{ settings.UnitPrice }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="TPSLTicks" value="{{ settings.TPSLTicks }}" required>
+                    </td>
+
+                    <td>
+                        <input type="text" class="form-control" name="ZoneDivider" value="{{ settings.ZoneDivider }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="TickPrice" value="{{ settings.TickPrice }}" required>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="Leverage" value="{{ settings.Leverage }}" required>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" name="placeorder" class="btn btn-lg btn-default"><span
+                    class="glyphicon glyphicon-bitcoin"></span>
+                PLACE ORDER
+            </button>
+        </form>
+        <hr>
+    </div>
+    <div class="container text-center" id="formorders">
+        <p>Get Active Orders <span class="glyphicon glyphicon-hand-down"></span></p>
+        <form action="" method="POST" role="form" style="width: 100%">
+            {% csrf_token %}
+            <table class="table table-dark" id="tableformorders">
+                <thead>
+                <tr>
+                    <th class="text-dark"> Pair</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="Pair" value="{{ settings.Pairs.0 }}"
+                               required>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" name="getorders" class="btn btn-lg btn-default"><span
+                    class="glyphicon glyphicon-th-list"></span>
+                ACTIVE ORDERS
+            </button>
+        </form>
+        <hr>
+    </div>
+    <div class="container text-center" id="formcancelorders">
+        <p>Cancel Active Orders <span class="glyphicon glyphicon-hand-down"></span></p>
+        <form action="" method="POST" role="form" style="margin: auto; width: 100%">
+            {% csrf_token %}
+            <table class="table table-dark" id="tableformcancelorders">
+                <thead>
+                <tr>
+                    <th class="text-dark"> Pair</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="Pair" value="{{ settings.Pairs.0 }}"
+                               required>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" name="cancelorders" class="btn btn-lg btn-default"><span
+                    class="glyphicon glyphicon-th-list"></span>
+                CANCEL ORDERS
+            </button>
+        </form>
+        <hr>
+    </div>
+    <div class="container text-center" id="formpositions">
+        <p>Get Positions <span class="glyphicon glyphicon-hand-down"></span></p>
+        <form action="" method="POST" role="form" style="margin: auto; width: 100%">
+            {% csrf_token %}
+            <table class="table table-dark" id="tableformpositions">
+                <thead>
+                <tr>
+                    <th class="text-dark"> Pair</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="Pair" value="{{ settings.Pairs.0 }}"
+                               required>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" name="getpositions" class="btn btn-lg btn-default"><span
+                    class="glyphicon glyphicon-th-list"></span>
+                GET POSITIONS
+            </button>
+        </form>
+        <hr>
+    </div>
+    <div class="container text-center" id="tableorder">
+        {% if order %}
+        <p>Base order has been placed</p>
+        <table class="table table-hover table-dark" id="tabletrade" style="margin: auto; width: 100%">
+            <thead>
+            <tr>
+                {% for key, value in order.items %}
+                <th class="text-dark"> {{ key }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% for key, value in order.items %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+        <hr>
+        {% endif %}
+    </div>
+    <div class="container" id="tableactiveorders">
+        {% if orders %}
+        <h3 class="text-center">Active Orders {{ orders.0.Pair }}</h3>
+        <table class="table table-hover table-dark" id="tableactive">
+            <thead class="thead-dark">
+            <tr>
+                {% for key, value in orders.0.items %}
+                <th class="text-dark"> {{ key }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+            <tr>
+                {% for key, value in order.items %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+        {% endif %}
+    </div>
+    <div class="container" id="tabletrades">
+        {% if trades %}
+        <h3 class="text-center">User Trades {{ trades.0.Pair }}</h3>
+        <table class="table table-hover table-dark" id="table">
+            <thead class="thead-dark">
+            <tr>
+                {% for key, value in trades.0.items %}
+                <th class="text-dark"> {{ key }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for trade in trades %}
+            <tr>
+                {% for key, value in trade.items %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+        {% endif %}
+    </div>
+    <div class="container" id="positions">
+        {% if positions %}
+        <h3 class="text-center">Positions {{ positions.0.Pair }}</h3>
+        <table class="table table-hover table-dark" id="tablepositions">
+            <thead class="thead-dark">
+            <tr>
+                {% for key, value in positions.0.items %}
+                <th class="text-dark"> {{ key }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for position in positions %}
+            <tr>
+                {% for key, value in position.items %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <hr>
+        {% endif %}
+    </div>
+    <div class="container text-center" id="formtrades">
+
+        <form action="" method="POST" role="form" style="width: 100%">
+            {% csrf_token %}
+            <p>Get Trades History <span class="glyphicon glyphicon-hand-down"></span></p>
+            <table class="table table-dark" id="tableformtrades">
+                <thead>
+                <tr>
+                    <th class="text-dark"> Pair</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" name="Pair" value="{{ settings.Pairs.0 }}"
+                               required>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="submit" name="gettrades" class="btn btn-lg btn-default"><span
+                    class="glyphicon glyphicon-th-list"></span>
+                GET TRADES
+            </button>
+        </form>
+        <hr>
+    </div>
+</div>
+{% endblock %}
